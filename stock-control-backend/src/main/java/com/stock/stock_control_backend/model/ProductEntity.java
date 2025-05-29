@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ProductEntity {
 
     @Id
@@ -24,5 +26,8 @@ public class ProductEntity {
 
     private BigDecimal supplierValue;
 
-    private Integer strockQuantity;
+    private Integer stockQuantity;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StockMovement> stockMovements = new ArrayList<>();
 }
