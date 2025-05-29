@@ -69,11 +69,11 @@ public class ProductService {
         }
     }
 
-    public List<ProductSummaryDTO> consultarPorTipo(ProductTypeEnum tipo) {
+    public List<ProductSummaryDTO> searchByType(ProductTypeEnum tipo) {
         List<ProductSummaryDTO> list = new ArrayList<>();
         for (ProductEntity productEntity : repository.findByType(tipo)) {
             int totalSaidas = productEntity.getStockMovements().stream()
-                    .filter(m -> m.getMovementTypeEnum() == MovementTypeEnum.EXIT)
+                    .filter(m -> m.getMovementType() == MovementTypeEnum.EXIT)
                     .mapToInt(StockMovement::getQuantityMovement)
                     .sum();
 
@@ -83,11 +83,11 @@ public class ProductService {
         return list;
     }
 
-    public ProfitProductDTO calcularLucro(Long id) {
+    public ProfitProductDTO calculateProfit(Long id) {
         ProductResponseDTO product = getProduct(id);
 
         List<StockMovementDTO> saidas = product.getStockMovements().stream()
-                .filter(m -> m.getMovementTypeEnum() == MovementTypeEnum.EXIT)
+                .filter(m -> m.getMovementType() == MovementTypeEnum.EXIT)
                 .toList();
 
         int totalSaida = saidas.stream().mapToInt(StockMovementDTO::getQuantityMovement).sum();

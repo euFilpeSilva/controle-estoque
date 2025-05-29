@@ -57,11 +57,11 @@ public class ProductController {
 
     @GetMapping("/tipo/{tipo}")
     public ResponseEntity<List<ProductSummaryDTO>> consultarPorTipo(@PathVariable ProductTypeEnum tipo) {
-        return ResponseEntity.ok(productService.consultarPorTipo(tipo));
+        return ResponseEntity.ok(productService.searchByType(tipo));
     }
 
     @GetMapping("/{id}/lucro")
-    public ResponseEntity<ProfitProductDTO> calcularLucro(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.calcularLucro(id));
+    public ResponseEntity<ProfitProductDTO> calculateProfit(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.calculateProfit(id));
     }
 }

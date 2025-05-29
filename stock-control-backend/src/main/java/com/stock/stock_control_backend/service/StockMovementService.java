@@ -20,11 +20,11 @@ public class StockMovementService {
     private final StockMovementRepository movimentoRepository;
     private final StockMovementMapper stockMovementMapper;
 
-    public StockMovementDTO registrarMovimento(StockMovementDTO movimento) {
+    public StockMovementDTO recordMovement(StockMovementDTO movimento) {
         ProductEntity produto = productRepository.findById(movimento.getProductId())
                 .orElseThrow(() -> new StockMovementException(ApplicationMessages.MOVEMENT_NOT_FOUND.toString()));
 
-        if (movimento.getMovementTypeEnum() == MovementTypeEnum.EXIT) {
+        if (movimento.getMovementType() == MovementTypeEnum.EXIT) {
             if (produto.getStockQuantity() < movimento.getQuantityMovement()) {
                 throw new StockMovementException(ApplicationMessages.INSUFFICIENT_STOCK.toString());
             }

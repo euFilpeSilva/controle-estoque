@@ -26,7 +26,7 @@ public class StockMovement {
     private ProductEntity product;
 
     @Enumerated(EnumType.STRING)
-    private MovementTypeEnum movementTypeEnum;
+    private MovementTypeEnum movementType;
 
     private BigDecimal salePrice;
 

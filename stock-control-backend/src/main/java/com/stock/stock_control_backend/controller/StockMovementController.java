@@ -18,7 +18,7 @@ public class StockMovementController {
     private final StockMovementService stockMovement;
 
     @PostMapping
-    public ResponseEntity<StockMovementDTO> registrarMovimento(@RequestBody StockMovementDTO movimento) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(stockMovement.registrarMovimento(movimento));
+    public ResponseEntity<StockMovementDTO> recordMovement(@RequestBody StockMovementDTO movimento) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(stockMovement.recordMovement(movimento));
     }
 }
