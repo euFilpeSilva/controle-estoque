@@ -97,7 +97,6 @@ async function salvar() {
       });
     }
     emit('product-saved');
-    // Reset the form
     form.value = {
       description: '',
       supplierValue: 0,
@@ -162,6 +161,6 @@ watch(
 }
 
 .el-form-item {
-  line-height: 0.2; /* Adjust the line height to reduce spacing */
+  line-height: 0.2;
 }
 </style>
