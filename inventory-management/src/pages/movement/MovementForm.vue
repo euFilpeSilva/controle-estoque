@@ -16,6 +16,7 @@
         <el-input
             :model-value="formattedSalePrice"
             @update:model-value="handleSalePriceInput"
+            :disabled="form.movementType === 'ENTRY'"
             placeholder="Digite o valor"
         />
       </el-form-item>
@@ -53,7 +54,7 @@ const rules = {
   productId: [{required: true, message: 'Produto é obrigatório', trigger: 'change'}],
   movementType: [{required: true, message: 'Tipo é obrigatório', trigger: 'change'}],
   quantityMovement: [{required: true, message: 'Quantidade é obrigatória', trigger: 'blur'}],
-  salePrice: [{required: true, message: 'Valor de Venda é obrigatório', trigger: 'blur'}],
+  // salePrice: [{required: true, message: 'Valor de Venda é obrigatório', trigger: 'blur'}],
   saleDate: [{required: true, message: 'Data da Venda é obrigatória', trigger: 'change'}],
 };
 
@@ -68,6 +69,14 @@ watch(form, async () => {
     isFormValid.value = await movementForm.value.validate().then(() => true).catch(() => false);
   }
 }, {deep: true});
+
+watch(() => form.value.movementType, (newType) => {
+  if (newType === 'ENTRY') {
+    rules.salePrice = [];
+  } else {
+    rules.salePrice = [{ required: true, message: 'Valor de Venda é obrigatório', trigger: 'blur' }];
+  }
+});
 
 onMounted(async () => {
   const res = await listarProdutosSemPaginacao();
