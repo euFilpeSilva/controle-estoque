@@ -110,9 +110,9 @@ class ProductControllerTest {
 
     @Test
     void deveCalculateProfit() throws Exception {
-        ProfitProductDTO lucro = new ProfitProductDTO("desc", 3, BigDecimal.valueOf(10));
+        ProfitProductDTO lucro = new ProfitProductDTO("desc", 3, BigDecimal.valueOf(10), "categoria");
 
-        Mockito.when(productService.calculateProfit(1L)).thenReturn(lucro);
+        Mockito.when(productService.calculateProfit(1L, null, null)).thenReturn(lucro);
 
         mockMvc.perform(get("/api/product/1/lucro"))
                 .andExpect(status().isOk())

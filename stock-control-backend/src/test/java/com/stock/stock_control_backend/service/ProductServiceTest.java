@@ -189,7 +189,7 @@ class ProductServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(new ProductEntity()));
         when(productMapper.toDTO(any())).thenReturn(product);
 
-        ProfitProductDTO result = service.calculateProfit(id);
+        ProfitProductDTO result = service.calculateProfit(id, null, null);
 
         assertEquals("desc", result.getDescription());
         assertEquals(3, result.getTotalOutputs());
