@@ -1,28 +1,28 @@
 <template>
   <el-card id="product-form-card">
     <el-form :model="form" :rules="rules" ref="productForm" label-width="120px">
-      <el-form-item label="Descrição" prop="description" label-width="165px">
+      <el-form-item label="Descrição" prop="description" label-width="170px">
         <el-input v-model="form.description" />
       </el-form-item>
-      <el-form-item label="Tipo" prop="type" label-width="165px">
+      <el-form-item label="Tipo" prop="type" label-width="175px">
         <el-select v-model="form.type" placeholder="Selecione">
           <el-option label="Eletrônico" value="ELECTRONICS" />
           <el-option label="Eletrodoméstico" value="HOME_APPLIANCE" />
           <el-option label="Móvel" value="FURNITURE" />
         </el-select>
       </el-form-item>
-      <el-form-item label="Valor do Fornecedor" prop="supplierValue" label-width="165px">
+      <el-form-item label="Valor do Fornecedor" prop="supplierValue" label-width="180px">
         <el-input
             :model-value="formattedSupplierValue"
             @update:model-value="handleInput"
             placeholder="Digite o valor"
         />
       </el-form-item>
-      <el-form-item label="Quantidade em Estoque" prop="stockQuantity" label-width="165px">
+      <el-form-item label="Quantidade em Estoque" prop="stockQuantity" label-width="180px">
         <el-input-number v-model="form.stockQuantity" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" :disabled="!isFormValid" @click="salvar" style="margin-left: 45px">Salvar</el-button>
+        <el-button type="primary" :disabled="!isFormValid" @click="salvar" style="margin-left: 60px">Salvar</el-button>
       </el-form-item>
     </el-form>
   </el-card>

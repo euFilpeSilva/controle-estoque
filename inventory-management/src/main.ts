@@ -3,6 +3,7 @@ import App from './App.vue';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css'; // Import Element Plus CSS
 import router from './router';
+import './assets/styles/global.css';
 
 const app = createApp(App);
 
