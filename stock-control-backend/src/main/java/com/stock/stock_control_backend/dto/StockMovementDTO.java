@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class StockMovementDTO {
+
     private Long id;
     private Long productId;
     private String productDescription;
