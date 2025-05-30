@@ -1,84 +1,86 @@
 # Vue 3 + TypeScript + Vite
 
-# Inventory Management Frontend
+# Frontend de Gestão de Estoque
 
-## Overview
+## Visão Geral
 
-This project is a frontend application for managing inventory, built using **Vue 3**, **TypeScript**, and **Vite**. It provides an intuitive interface for managing products, tracking movements, and generating profit reports. The application integrates with a backend API developed in **Java** using **Spring Boot**.
+Este projeto é uma aplicação frontend para gestão de estoque, construída utilizando **Vue 3**, **TypeScript** e **Vite**. Ele fornece uma interface intuitiva para gerenciar produtos, acompanhar movimentações e gerar relatórios de lucro. A aplicação integra-se com uma API backend desenvolvida em **Java** usando **Spring Boot**.
 
-## Features
+## Funcionalidades
 
-- **Product Management**: Add, edit, delete, and list products.
-- **Movements Tracking**: Monitor inventory movements.
-- **Profit Reports**: Generate and view profit reports with date filters.
-- **Responsive Design**: Optimized for desktop and mobile devices.
-- **Modern UI**: Built with **Element Plus** for a clean and professional look.
+- **Gestão de Produtos**: Adicionar, editar, excluir e listar produtos.
+- **Acompanhamento de Movimentações**: Monitorar movimentações de estoque.
+- **Relatórios de Lucro**: Gerar e visualizar relatórios de lucro com filtros de data.
+- **Design Responsivo**: Otimizado para dispositivos desktop e móveis.
+- **UI Moderna**: Construída com **Element Plus** para um visual limpo e profissional.
 
-## Technologies Used
+## Tecnologias Utilizadas
 
 ### Frontend
-- **Vue 3**: Progressive JavaScript framework for building user interfaces.
-- **TypeScript**: Strongly typed programming language for better code quality.
-- **Vite**: Fast build tool for modern web applications.
-- **Element Plus**: UI library for Vue 3.
-- **Axios**: HTTP client for API communication.
+- **Vue 3**: Framework JavaScript progressivo para construção de interfaces de usuário.
+- **TypeScript**: Linguagem de programação fortemente tipada para melhor qualidade de código.
+- **Vite**: Ferramenta de build rápida para aplicações web modernas.
+- **Element Plus**: Biblioteca de UI para Vue 3.
+- **Axios**: Cliente HTTP para comunicação com APIs.
 
 ### Backend
-- **Java**: Backend language.
-- **Spring Boot**: Framework for building RESTful APIs.
-- **Maven**: Dependency management.
+- **Java**: Linguagem de programação para o backend.
+- **Spring Boot**: Framework para construção de APIs RESTful.
+- **Maven**: Gerenciador de dependências.
 
-## Project Structure
+## Estrutura do Projeto
 
-inventory-management/ ├── src/ │ ├── components/ # Reusable Vue components │ ├── views/ # Application pages │ ├── services/ # API service functions │ ├── types/ # TypeScript type definitions │ ├── assets/ # Static assets (images, styles, etc.) │ ├── App.vue # Main application component │ ├── main.ts # Application entry point │ └── router.ts # Vue Router configuration ├── public/ # Public static files ├── package.json # Project dependencies ├── tsconfig.json # TypeScript configuration ├── vite.config.ts # Vite configuration └── README.md # Project documentation
+![img.png](img.png)
 
-# Project documentation
+## Documentação do Projeto
 
-## Installation
+## Instalação
 
-### Prerequisites
-- **Node.js** (v16 or higher)
-- **npm** (v8 or higher)
+### Pré-requisitos
+- **Node.js** (v16 ou superior)
+- **npm** (v8 ou superior)
 
-### Steps
-1. Clone the repository:
+### Passos
+1. Clone o repositório:
    ```bash
    git clone https://github.com/your-username/inventory-management.git
    cd inventory-management
 
-Install dependencies:  
+Instale as dependências:  
 npm install
-Start the development server:  
+Inicie o servidor de desenvolvimento:  
 npm run dev
-Open the application in your browser at http://localhost:3000.  
+Abra a aplicação no navegador em http://localhost:3000.  
 Scripts
-npm run dev: Start the development server.
-npm run build: Build the application for production.
-npm run preview: Preview the production build locally.
-npm run lint: Run linting checks.
-API Integration
-The frontend communicates with the backend API hosted at http://localhost:8080/api. Below are the key endpoints used:  
-GET /product: List products with pagination.
-GET /product/all: List all products without pagination.
-POST /product: Save a new product.
-PUT /product/{id}: Edit an existing product.
-DELETE /product/{id}: Delete a product.
-GET /product/lucro: Fetch paginated profit reports.
-Customization
-Environment Variables
-You can configure the API base URL by creating a .env file in the project root: VITE_API_BASE_URL=http://localhost:8080/api
+npm run dev: Inicia o servidor de desenvolvimento.
+npm run build: Gera a aplicação para produção.
+npm run preview: Faz uma pré-visualização da build de produção localmente.
+npm run lint: Executa verificações de linting.
+Integração com API
+O frontend comunica-se com a API backend hospedada em http://localhost:8080/api. Abaixo estão os principais endpoints utilizados:  
+GET /product: Lista produtos com paginação.
+GET /product/all: Lista todos os produtos sem paginação.
+POST /product: Salva um novo produto.
+PUT /product/{id}: Edita um produto existente.
+DELETE /product/{id}: Exclui um produto.
+GET /product/lucro: Busca relatórios de lucro paginados.
+Personalização
+Variáveis de Ambiente
+Você pode configurar a URL base da API criando um arquivo .env na raiz do projeto:
 
-Styling
-The application uses scoped styles and global CSS variables for customization. You can modify the styles in the App.vue file or individual components.  
-Contributing
-Fork the repository.
-Create a new branch for your feature or bug fix.
-Commit your changes and push them to your fork.
-Submit a pull request.
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
-Acknowledgments
-Vue.js Documentation
-TypeScript Documentation
-Element Plus Documentation
-Vite Documentation
+VITE_API_BASE_URL=http://localhost:8080/api
+
+Estilização
+A aplicação utiliza estilos escopados e variáveis globais de CSS para personalização. Você pode modificar os estilos no arquivo App.vue ou nos componentes individuais.  
+Contribuição
+Faça um fork do repositório.
+Crie uma nova branch para sua funcionalidade ou correção de bug.
+Commit suas alterações e envie para seu fork.
+Submeta um pull request.
+Licença
+Este projeto está licenciado sob a Licença MIT. Veja o arquivo LICENSE para mais detalhes.
+Agradecimentos
+Documentação do Vue.js
+Documentação do TypeScript
+Documentação do Element Plus
+Documentação do Vite
