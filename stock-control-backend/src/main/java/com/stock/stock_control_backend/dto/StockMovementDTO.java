@@ -14,8 +14,11 @@ import java.time.LocalDateTime;
 public class StockMovementDTO {
     private Long id;
     private Long productId;
+    private String productDescription;
     private MovementTypeEnum movementType;
     private BigDecimal salePrice;
+    private String salePriceFormatted;
     private LocalDateTime saleDate;
     private Integer quantityMovement;
+    private String saleDateFormatted;
 }

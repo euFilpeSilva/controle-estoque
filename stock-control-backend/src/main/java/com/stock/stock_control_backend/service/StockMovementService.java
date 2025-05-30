@@ -10,7 +10,12 @@ import com.stock.stock_control_backend.repository.ProductRepository;
 import com.stock.stock_control_backend.repository.StockMovementRepository;
 import com.stock.stock_control_backend.utils.ApplicationMessages;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -41,5 +46,17 @@ public class StockMovementService {
         StockMovement saved = movimentoRepository.save(movimentoEntity);
 
         return stockMovementMapper.toDto(saved);
+    }
+
+    public Page<StockMovementDTO> listarMovimentacoes(int page, int size) {
+        NumberFormat formatador = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+        return movimentoRepository.findAll(PageRequest.of(page, size))
+                .map(mov -> {
+                    StockMovementDTO dto = stockMovementMapper.toDto(mov);
+                    if (dto.getSalePrice() != null) {
+                        dto.setSalePriceFormatted(formatador.format(dto.getSalePrice()));
+                    }
+                    return dto;
+                });
     }
 }

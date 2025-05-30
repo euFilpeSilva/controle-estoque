@@ -16,8 +16,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -54,10 +58,24 @@ public class ProductService {
 
     public Page<ProductResponseDTO> getAllProducts(int page, int size) {
         Page<ProductEntity> entities = repository.findAll(PageRequest.of(page, size));
+        NumberFormat formatador = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
         List<ProductResponseDTO> dtoList = productMapper.toDTOList(entities.getContent());
+        dtoList.forEach(dto -> {
+            if (dto.getSupplierValue() != null) {
+                dto.setSupplierValueFormatted(formatador.format(dto.getSupplierValue()));
+            }
+        });
 
         return new PageImpl<>(dtoList, entities.getPageable(), entities.getTotalElements());
+    }
+
+    // ProductService.java
+    public List<ProductResponseDTO> getAllProducts() {
+        return repository.findAll()
+                .stream()
+                .map(productMapper::toDTO)
+                .toList();
     }
 
 
@@ -83,11 +101,20 @@ public class ProductService {
         return list;
     }
 
-    public ProfitProductDTO calculateProfit(Long id) {
+    public ProfitProductDTO calculateProfit(Long id, String startDate, String endDate) {
         ProductResponseDTO product = getProduct(id);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        LocalDateTime start = startDate != null ? LocalDateTime.parse(startDate, formatter) : null;
+        LocalDateTime end = endDate != null ? LocalDateTime.parse(endDate, formatter) : null;
 
         List<StockMovementDTO> saidas = product.getStockMovements().stream()
                 .filter(m -> m.getMovementType() == MovementTypeEnum.EXIT)
+                .filter(m -> {
+                    if (start != null && m.getSaleDate().isBefore(start)) return false;
+                    if (end != null && m.getSaleDate().isAfter(end)) return false;
+                    return true;
+                })
                 .toList();
 
         int totalSaida = saidas.stream().mapToInt(StockMovementDTO::getQuantityMovement).sum();
@@ -96,6 +123,19 @@ public class ProductService {
                 .map(m -> m.getSalePrice().subtract(product.getSupplierValue()).multiply(BigDecimal.valueOf(m.getQuantityMovement())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return new ProfitProductDTO(product.getDescription(), totalSaida, lucro);
+        NumberFormat formatador = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+        String lucroFormatado = formatador.format(lucro);
+
+        return new ProfitProductDTO(product.getDescription(), totalSaida, lucro, lucroFormatado);
+    }
+
+    // ProductService.java
+
+    public Page<ProfitProductDTO> getAllProfits(int page, int size, String startDate, String endDate) {
+        List<ProductResponseDTO> products = getAllProducts(page, size).getContent();
+        List<ProfitProductDTO> profits = products.stream()
+                .map(p -> calculateProfit(p.getId(), startDate, endDate))
+                .toList();
+        return new PageImpl<>(profits, PageRequest.of(page, size), profits.size());
     }
 }

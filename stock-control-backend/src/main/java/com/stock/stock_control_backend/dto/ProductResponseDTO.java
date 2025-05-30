@@ -12,6 +12,7 @@ public class ProductResponseDTO {
     private String description;
     private String type;
     private BigDecimal supplierValue;
+    private String supplierValueFormatted;
     private Integer stockQuantity;
     private List<StockMovementDTO> stockMovements = new ArrayList<>();
 }

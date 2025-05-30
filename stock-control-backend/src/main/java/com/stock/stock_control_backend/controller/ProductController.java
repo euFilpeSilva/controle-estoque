@@ -60,8 +60,25 @@ public class ProductController {
         return ResponseEntity.ok(productService.searchByType(tipo));
     }
 
+    @GetMapping("/lucro")
+    public ResponseEntity<Page<ProfitProductDTO>> getAllProfits(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
+        return ResponseEntity.ok(productService.getAllProfits(page, size, startDate, endDate));
+    }
+
     @GetMapping("/{id}/lucro")
-    public ResponseEntity<ProfitProductDTO> calculateProfit(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.calculateProfit(id));
+    public ResponseEntity<ProfitProductDTO> getProfit(
+            @PathVariable Long id,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
+        return ResponseEntity.ok(productService.calculateProfit(id, startDate, endDate));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 }

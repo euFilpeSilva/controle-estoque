@@ -14,4 +14,5 @@ public class ProfitProductDTO {
     private String description;
     private int totalOutputs;
     private BigDecimal totalProfit;
+    private String totalProfitFormatted;
 }
