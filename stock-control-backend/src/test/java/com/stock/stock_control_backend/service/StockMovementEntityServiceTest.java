@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-class StockMovementServiceTest {
+class StockMovementEntityServiceTest {
 
     private ProductRepository productRepository;
     private StockMovementRepository movimentoRepository;

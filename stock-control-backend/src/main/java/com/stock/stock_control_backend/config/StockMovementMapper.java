@@ -1,7 +1,7 @@
 package com.stock.stock_control_backend.config;
 
 import com.stock.stock_control_backend.dto.StockMovementDTO;
-import com.stock.stock_control_backend.model.StockMovement;
+import com.stock.stock_control_backend.model.StockMovementEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface StockMovementMapper {
 
-    default StockMovementDTO toDto(StockMovement movimento) {
+    default StockMovementDTO toDto(StockMovementEntity movimento) {
         StockMovementDTO dto = new StockMovementDTO();
         dto.setId(movimento.getId());
         dto.setProductId(movimento.getProduct().getId());
@@ -28,10 +28,10 @@ public interface StockMovementMapper {
     }
 
     @Mapping(target = "product.id", source = "productId")
-    StockMovement toEntity(StockMovementDTO stockMovementDTO);
+    StockMovementEntity toEntity(StockMovementDTO stockMovementDTO);
 
-    List<StockMovementDTO> toDtoList(List<StockMovement> stockMovements);
+    List<StockMovementDTO> toDtoList(List<StockMovementEntity> stockMovements);
 
-    List<StockMovement> toEntityList(List<StockMovementDTO> stockMovementDTOs);
+    List<StockMovementEntity> toEntityList(List<StockMovementDTO> stockMovementDTOs);
 
 }

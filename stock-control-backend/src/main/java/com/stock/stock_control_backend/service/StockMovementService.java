@@ -4,7 +4,7 @@ import com.stock.stock_control_backend.config.StockMovementMapper;
 import com.stock.stock_control_backend.dto.StockMovementDTO;
 import com.stock.stock_control_backend.exception.StockMovementException;
 import com.stock.stock_control_backend.model.ProductEntity;
-import com.stock.stock_control_backend.model.StockMovement;
+import com.stock.stock_control_backend.model.StockMovementEntity;
 import com.stock.stock_control_backend.model.enums.MovementTypeEnum;
 import com.stock.stock_control_backend.repository.ProductRepository;
 import com.stock.stock_control_backend.repository.StockMovementRepository;
@@ -40,10 +40,10 @@ public class StockMovementService {
 
         productRepository.save(produto);
 
-        StockMovement movimentoEntity = stockMovementMapper.toEntity(movimento);
+        StockMovementEntity movimentoEntity = stockMovementMapper.toEntity(movimento);
         movimentoEntity.setProduct(produto);
 
-        StockMovement saved = movimentoRepository.save(movimentoEntity);
+        StockMovementEntity saved = movimentoRepository.save(movimentoEntity);
 
         return stockMovementMapper.toDto(saved);
     }

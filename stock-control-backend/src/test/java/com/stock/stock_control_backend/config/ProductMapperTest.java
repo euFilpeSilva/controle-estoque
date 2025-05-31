@@ -4,7 +4,7 @@ import com.stock.stock_control_backend.dto.ProductRequestDTO;
 import com.stock.stock_control_backend.dto.ProductResponseDTO;
 import com.stock.stock_control_backend.dto.StockMovementDTO;
 import com.stock.stock_control_backend.model.ProductEntity;
-import com.stock.stock_control_backend.model.StockMovement;
+import com.stock.stock_control_backend.model.StockMovementEntity;
 import com.stock.stock_control_backend.model.enums.ProductTypeEnum;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +51,7 @@ class ProductMapperTest {
 
     @Test
     void mapStockMovements_deveChamarMapperSeNaoNull() {
-        List<StockMovement> movements = List.of(new StockMovement());
+        List<StockMovementEntity> movements = List.of(new StockMovementEntity());
         StockMovementMapper stockMovementMapper = mock(StockMovementMapper.class);
         List<StockMovementDTO> dtos = List.of(new StockMovementDTO());
         when(stockMovementMapper.toDtoList(movements)).thenReturn(dtos);

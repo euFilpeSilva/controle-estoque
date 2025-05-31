@@ -1,5 +1,6 @@
 package com.stock.stock_control_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.stock.stock_control_backend.model.enums.MovementTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockMovement {
+public class StockMovementEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,7 @@ public class StockMovement {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id")
+    @JsonBackReference
     private ProductEntity product;
 
     @Enumerated(EnumType.STRING)

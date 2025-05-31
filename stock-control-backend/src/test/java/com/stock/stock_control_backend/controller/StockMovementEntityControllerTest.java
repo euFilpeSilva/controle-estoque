@@ -23,8 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(StockMovementController.class)
-class StockMovementControllerTest {
-
+class StockMovementEntityControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

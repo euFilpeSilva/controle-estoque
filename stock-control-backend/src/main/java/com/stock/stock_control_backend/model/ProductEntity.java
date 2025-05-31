@@ -1,5 +1,6 @@
 package com.stock.stock_control_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.stock.stock_control_backend.model.enums.ProductTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,5 +30,6 @@ public class ProductEntity {
     private Integer stockQuantity;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StockMovement> stockMovements = new ArrayList<>();
+    @JsonManagedReference
+    private List<StockMovementEntity> stockMovements = new ArrayList<>();
 }

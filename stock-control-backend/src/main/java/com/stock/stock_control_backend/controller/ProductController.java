@@ -1,9 +1,8 @@
 package com.stock.stock_control_backend.controller;
 
-import com.stock.stock_control_backend.dto.ProductResponseDTO;
-import com.stock.stock_control_backend.dto.ProductRequestDTO;
-import com.stock.stock_control_backend.dto.ProductSummaryDTO;
-import com.stock.stock_control_backend.dto.ProfitProductDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.stock.stock_control_backend.dto.*;
+import com.stock.stock_control_backend.model.ProductHistoryEntity;
 import com.stock.stock_control_backend.model.enums.ProductTypeEnum;
 import com.stock.stock_control_backend.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,7 +49,7 @@ public class ProductController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO dto) {
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO dto) throws JsonProcessingException {
         ProductResponseDTO updatedProduct = productService.updateProduct(id, dto);
         return ResponseEntity.ok(updatedProduct);
     }
@@ -80,5 +79,11 @@ public class ProductController {
     @GetMapping("/all")
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    @GetMapping("/{id}/history")
+    public ResponseEntity<List<ProductHistoryDTO>> getProductHistory(@PathVariable Long id) {
+        List<ProductHistoryDTO> history = productService.getProductHistory(id);
+        return ResponseEntity.ok(history);
     }
 }

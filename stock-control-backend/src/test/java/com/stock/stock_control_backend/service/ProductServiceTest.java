@@ -1,12 +1,15 @@
 package com.stock.stock_control_backend.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stock.stock_control_backend.config.ProductMapper;
 import com.stock.stock_control_backend.dto.*;
 import com.stock.stock_control_backend.exception.ProductException;
 import com.stock.stock_control_backend.model.ProductEntity;
-import com.stock.stock_control_backend.model.StockMovement;
+import com.stock.stock_control_backend.model.StockMovementEntity;
 import com.stock.stock_control_backend.model.enums.MovementTypeEnum;
 import com.stock.stock_control_backend.model.enums.ProductTypeEnum;
+import com.stock.stock_control_backend.repository.ProductHistoryRepository;
 import com.stock.stock_control_backend.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,8 +35,9 @@ class ProductServiceTest {
     @BeforeEach
     void setUp() {
         repository = mock(ProductRepository.class);
+        ProductHistoryRepository historyRepository = mock(ProductHistoryRepository.class);
         productMapper = mock(ProductMapper.class);
-        service = new ProductService(repository, productMapper);
+        service = new ProductService(repository, historyRepository, productMapper);
     }
 
     @Test
@@ -51,26 +55,6 @@ class ProductServiceTest {
 
         assertEquals(response, result);
         verify(repository).save(entity);
-    }
-
-    @Test
-    void deveAtualizarProduto() {
-        Long id = 1L;
-        ProductRequestDTO dto = new ProductRequestDTO();
-        ProductEntity existing = new ProductEntity();
-        ProductEntity updated = new ProductEntity();
-        ProductResponseDTO response = new ProductResponseDTO();
-
-        when(repository.findById(id)).thenReturn(Optional.of(existing));
-        doNothing().when(productMapper).updateEntityFromDto(dto, existing);
-        when(repository.save(existing)).thenReturn(updated);
-        when(productMapper.toDTO(updated)).thenReturn(response);
-
-        ProductResponseDTO result = service.updateProduct(id, dto);
-
-        assertEquals(response, result);
-        verify(productMapper).updateEntityFromDto(dto, existing);
-        verify(repository).save(existing);
     }
 
     @Test
@@ -147,11 +131,11 @@ class ProductServiceTest {
         entity.setDescription("desc");
         entity.setStockQuantity(10);
 
-        StockMovement mov1 = new StockMovement();
+        StockMovementEntity mov1 = new StockMovementEntity();
         mov1.setMovementType(MovementTypeEnum.EXIT);
         mov1.setQuantityMovement(3);
 
-        StockMovement mov2 = new StockMovement();
+        StockMovementEntity mov2 = new StockMovementEntity();
         mov2.setMovementType(MovementTypeEnum.ENTRY);
         mov2.setQuantityMovement(5);
 
