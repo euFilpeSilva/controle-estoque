@@ -9,6 +9,7 @@ Backend para gerenciamento de estoque, desenvolvido em Java com Spring Boot. For
 - Maven
 - Spring Data JPA
 - Lombok
+- MapStruct
 - Swagger/OpenAPI
 - JUnit 5
 - Mockito
