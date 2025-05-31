@@ -44,7 +44,10 @@ GET /api/product/all Lista todos os produtos (sem paginação).
 Lucro
 GET /api/product/lucro Lista paginada de produtos com lucro. Parâmetros opcionais: startDate, endDate.  
 GET /api/product/{id}/lucro Detalha o lucro de um produto por ID, com filtro opcional de datas.
-Estrutura do Projeto
+
+![img_swagger.png](img_swagger.png)
+
+## Estrutura do Projeto
 
 ![img.png](img.png)
 
