@@ -28,8 +28,31 @@
       <el-table-column prop="supplierValueFormatted" label="Valor do Fornecedor"/>
       <el-table-column label="Ações">
         <template #default="scope">
-          <el-button type="primary" @click="openDrawer(scope.row)">Editar</el-button>
-          <el-button type="danger" @click="excluirProduto(scope.row.id)">Excluir</el-button>
+          <div class="actions-container">
+            <el-button
+                type="primary"
+                circle
+                @click="openDrawer(scope.row)"
+                title="Editar Produto">
+              <i class="fas fa-edit"></i>
+            </el-button>
+
+            <el-button
+                type="danger"
+                circle
+                @click="excluirProduto(scope.row.id)"
+                title="Excluir Produto">
+              <i class="fas fa-trash"></i>
+            </el-button>
+
+            <el-button
+                type="info"
+                circle
+                @click="openHistoryModal(scope.row.id)"
+                title="Ver Histórico">
+              <i class="fas fa-history"></i>
+            </el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -53,14 +76,20 @@
     >
       <ProductForm :product="selectedProduct" @close="closeDrawer" @product-saved="handleProductSaved"/>
     </el-drawer>
+
   </el-card>
+  <Modal v-if="isModalVisible" :isVisible="isModalVisible" @close="closeModal" class="modal-below">
+    <ProductHistory :productId="selectedProductId"/>
+  </Modal>
 </template>
 
 <script lang="ts" setup>
+import Modal from "@/components/Modal.vue";
+import ProductHistory from '@/pages/ProductHistory.vue';
 import {computed, onMounted, ref} from 'vue';
-import {deletarProduto, listarProdutos} from "@/services/productService";
-import {Product} from "@/types/Product";
-import ProductForm from "@/pages/product/ProductForm.vue";
+import {deletarProduto, listarProdutos} from '@/services/productService';
+import {Product} from '@/types/Product';
+import ProductForm from '@/pages/product/ProductForm.vue';
 
 const produtos = ref<Product[]>([]);
 const currentPage = ref(1);
@@ -68,17 +97,19 @@ const pageSize = ref(10);
 const totalItems = ref(0);
 const drawerVisible = ref(false);
 const selectedProduct = ref<Partial<Product> | null>(null);
-const selectedType = ref(""); // Store the selected type
+const selectedType = ref('');
+const isModalVisible = ref(false);
+const selectedProductId = ref<number | null>(null);
 
 const filteredProducts = computed(() => {
   if (!selectedType.value) {
-    return produtos.value; // Show all products if no type is selected
+    return produtos.value;
   }
   return produtos.value.filter(product => product.type === selectedType.value);
 });
 
 const drawerTitle = computed(() => {
-  return selectedProduct.value ? "Editar Produto" : "Cadastrar Produto";
+  return selectedProduct.value ? 'Editar Produto' : 'Cadastrar Produto';
 });
 
 async function fetchProducts() {
@@ -92,7 +123,7 @@ async function excluirProduto(id: number) {
     await deletarProduto(id);
     await fetchProducts();
   } catch (error) {
-    console.error("Erro ao excluir produto:", error);
+    console.error('Erro ao excluir produto:', error);
   }
 }
 
@@ -116,6 +147,20 @@ function handleProductSaved() {
   fetchProducts();
 }
 
+function openHistoryModal(productId: number) {
+  if (isModalVisible.value && selectedProductId.value === productId) {
+    closeModal();
+  } else {
+    selectedProductId.value = productId;
+    isModalVisible.value = true;
+  }
+}
+
+function closeModal() {
+  isModalVisible.value = false;
+  selectedProductId.value = null;
+}
+
 onMounted(fetchProducts);
 </script>
 
@@ -127,7 +172,7 @@ onMounted(fetchProducts);
 }
 
 :deep(.el-drawer__body) {
-  padding: 0 !important; /* Remove o padding */
+  padding: 0 !important;
 }
 
 .title-container {
@@ -150,8 +195,29 @@ onMounted(fetchProducts);
   margin-left: 10px;
 }
 
+.modal-below {
+  margin-top: 20px;
+}
+
 #paginacao {
   margin-top: 20px;
   margin-left: 5px;
+}
+
+.actions-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 1154px) {
+  .actions-container {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .actions-container .el-button {
+    font-size: 14px;
+    padding: 8px;
+  }
 }
 </style>

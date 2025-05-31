@@ -31,3 +31,7 @@ export async function listarLucroPaginado(page: number, size: number, startDate?
 export async function deletarProduto(id: number) {
     return axios.delete(`${API_BASE_URL}/product/${id}`);
 }
+
+export async function buscarHistoricoEdicao(id: number) {
+    return axios.get(`${API_BASE_URL}/product/${id}/history`);
+}
