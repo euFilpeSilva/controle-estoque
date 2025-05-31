@@ -1,10 +1,10 @@
 <template>
   <el-card id="product-form-card">
     <el-form :model="form" :rules="rules" ref="productForm" label-width="120px">
-      <el-form-item label="Descrição" prop="description" label-width="170px">
+      <el-form-item label="Descrição" prop="description" label-width="180px">
         <el-input v-model="form.description" />
       </el-form-item>
-      <el-form-item label="Tipo" prop="type" label-width="175px">
+      <el-form-item label="Tipo" prop="type" label-width="180px">
         <el-select v-model="form.type" placeholder="Selecione">
           <el-option label="Eletrônico" value="ELECTRONICS" />
           <el-option label="Eletrodoméstico" value="HOME_APPLIANCE" />

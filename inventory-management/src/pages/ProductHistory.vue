@@ -67,7 +67,7 @@
         </tr>
         </tbody>
       </table>
-      <p v-else>Nenhum histórico encontrado para este produto.</p>
+      <p v-if="history.length === 0">Nenhum histórico encontrado para este produto.</p>
     </div>
   </div>
 </template>
