@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="start" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="com.stock.stock_control_backend.StockControlBackendApplication" />
-    <module name="stock-control-backend" />
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
-  </configuration>
-</component>
