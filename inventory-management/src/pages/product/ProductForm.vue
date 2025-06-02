@@ -1,6 +1,9 @@
 <template>
   <el-card id="product-form-card">
     <el-form :model="form" :rules="rules" ref="productForm" label-width="120px">
+      <el-form-item label="Código" prop="code" label-width="180px">
+        <el-input v-model="form.code"/>
+      </el-form-item>
       <el-form-item label="Descrição" prop="description" label-width="180px">
         <el-input v-model="form.description" />
       </el-form-item>

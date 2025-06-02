@@ -14,7 +14,6 @@ import com.stock.stock_control_backend.repository.ProductHistoryRepository;
 import com.stock.stock_control_backend.repository.ProductRepository;
 import com.stock.stock_control_backend.utils.ApplicationMessages;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +23,9 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -36,31 +34,44 @@ public class ProductService {
     private final ProductRepository repository;
     private final ProductHistoryRepository historyRepository;
     private final ProductMapper productMapper;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public ProductResponseDTO createProduct(ProductRequestDTO request) {
         ProductEntity entity = productMapper.toEntity(request);
+
+        if (isNull(request.getCode()) || request.getCode().isBlank()) {
+            String generatedCode = generateUniqueProductCode();
+            entity.setCode(generatedCode);
+        } else {
+            if (repository.existsByCode(request.getCode())) {
+                throw new IllegalArgumentException("Código de produto já existente: " + request.getCode());
+            }
+            entity.setCode(request.getCode());
+        }
+
         ProductEntity saved = repository.save(entity);
         return productMapper.toDTO(saved);
     }
 
+    private String generateUniqueProductCode() {
+        String code;
+        do {
+            code = "PRD-" + String.format("%04d", new Random().nextInt(10000));
+        } while (repository.existsByCode(code));
+        return code;
+    }
 
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto) throws JsonProcessingException {
         ProductEntity existing = repository.findById(id)
                 .orElseThrow(() -> new ProductException("Produto não encontrado"));
 
-        // Serializa o estado anterior
         String previousState = objectMapper.writeValueAsString(existing);
 
         productMapper.updateEntityFromDto(dto, existing);
         ProductEntity updated = repository.save(existing);
 
-        // Serializa o estado atualizado
         String updatedState = objectMapper.writeValueAsString(updated);
 
-        // Salva o histórico
         ProductHistoryEntity history = new ProductHistoryEntity();
         history.setProductId(id);
         history.setPreviousState(previousState);
@@ -163,23 +174,19 @@ public class ProductService {
 
     private Object formatSupplierAndSalePrice(Object stateObj) {
         if (stateObj instanceof Map<?, ?>) {
-            @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) stateObj;
             NumberFormat formatador = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-            // Formata supplierValue
             Object supplierValue = map.get("supplierValue");
             if (supplierValue instanceof Number) {
                 map.put("supplierValueFormatted", formatador.format(supplierValue));
             }
 
-            // Formata salePrice e saleDate em stockMovements
             Object stockMovements = map.get("stockMovements");
             if (stockMovements instanceof List<?> list) {
                 for (Object item : list) {
                     if (item instanceof Map<?, ?>) {
-                        @SuppressWarnings("unchecked")
                         Map<String, Object> movement = (Map<String, Object>) item;
                         Object salePrice = movement.get("salePrice");
                         if (salePrice instanceof Number) {
@@ -191,7 +198,7 @@ public class ProductService {
                                 LocalDateTime dateTime = LocalDateTime.parse((String) saleDate);
                                 movement.put("saleDateFormatted", dateTime.format(dateFormatter));
                             } catch (Exception ignored) {
-                                // Ignora caso não consiga converter
+                                movement.put("saleDateFormatted", saleDate);
                             }
                         }
                     }

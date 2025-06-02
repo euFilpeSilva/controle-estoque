@@ -5,7 +5,12 @@
     </div>
     <el-button id="bot-cadastro" type="primary" @click="drawerVisible = true">Nova Movimentação</el-button>
     <el-table :data="movements" style="width: 100%">
-      <el-table-column prop="productDescription" label="Produto"/>
+      <el-table-column label="Produto">
+        <template #default="scope">
+          {{ scope.row.productCode }} - {{ scope.row.productDescription }}
+        </template>
+      </el-table-column>
+
       <el-table-column
           prop="movementType"
           label="Tipo"

@@ -14,4 +14,8 @@ public enum ApplicationMessages {
     public String format(Object... args) {
         return String.format(message, args);
     }
+
+    public String getMessage() {
+        return message;
+    }
 }

@@ -2,7 +2,6 @@ package com.stock.stock_control_backend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.stock.stock_control_backend.dto.*;
-import com.stock.stock_control_backend.model.ProductHistoryEntity;
 import com.stock.stock_control_backend.model.enums.ProductTypeEnum;
 import com.stock.stock_control_backend.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;

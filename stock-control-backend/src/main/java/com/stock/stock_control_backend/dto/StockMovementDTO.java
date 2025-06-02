@@ -16,6 +16,7 @@ public class StockMovementDTO {
     private Long id;
     private Long productId;
     private String productDescription;
+    private String productCode;
     private MovementTypeEnum movementType;
     private BigDecimal salePrice;
     private String salePriceFormatted;

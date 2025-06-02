@@ -20,6 +20,7 @@ public interface StockMovementMapper {
         dto.setSaleDate(movimento.getSaleDate());
         dto.setQuantityMovement(movimento.getQuantityMovement());
         dto.setProductDescription(movimento.getProduct().getDescription());
+        dto.setProductCode(movimento.getProduct().getCode());
         if (movimento.getSaleDate() != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             dto.setSaleDateFormatted(movimento.getSaleDate().format(formatter));

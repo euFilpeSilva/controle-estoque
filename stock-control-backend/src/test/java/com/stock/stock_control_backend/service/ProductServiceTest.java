@@ -37,7 +37,7 @@ class ProductServiceTest {
         repository = mock(ProductRepository.class);
         ProductHistoryRepository historyRepository = mock(ProductHistoryRepository.class);
         productMapper = mock(ProductMapper.class);
-        service = new ProductService(repository, historyRepository, productMapper);
+        service = new ProductService(repository, historyRepository, productMapper, new ObjectMapper());
     }
 
     @Test

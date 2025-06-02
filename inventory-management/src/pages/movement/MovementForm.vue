@@ -30,7 +30,11 @@
         <el-button type="primary" :disabled="!isFormValid" @click="salvar">Salvar</el-button>
       </el-form-item>
     </el-form>
+
   </el-card>
+    <el-divider id="estoque-disponivel" v-if="produtoSelecionado" >
+      Estoque disponível: {{ produtoSelecionado.stockQuantity }}
+    </el-divider>
 </template>
 
 <script lang="ts" setup>
@@ -54,7 +58,6 @@ const rules = {
   productId: [{required: true, message: 'Produto é obrigatório', trigger: 'change'}],
   movementType: [{required: true, message: 'Tipo é obrigatório', trigger: 'change'}],
   quantityMovement: [{required: true, message: 'Quantidade é obrigatória', trigger: 'blur'}],
-  // salePrice: [{required: true, message: 'Valor de Venda é obrigatório', trigger: 'blur'}],
   saleDate: [{required: true, message: 'Data da Venda é obrigatória', trigger: 'change'}],
 };
 
@@ -63,6 +66,8 @@ const isFormValid = ref(false);
 
 const props = defineProps<{ product: Partial<Movement> | null }>();
 const emit = defineEmits(['movement-saved']);
+const produtoSelecionado = ref<Product | null>(null);
+const formattedSalePrice = ref('');
 
 watch(form, async () => {
   if (movementForm.value) {
@@ -76,6 +81,10 @@ watch(() => form.value.movementType, (newType) => {
   } else {
     rules.salePrice = [{ required: true, message: 'Valor de Venda é obrigatório', trigger: 'blur' }];
   }
+});
+
+watch(() => form.value.productId, (novoId) => {
+  produtoSelecionado.value = produtos.value.find(p => p.id === novoId) || null;
 });
 
 onMounted(async () => {
@@ -113,18 +122,19 @@ async function salvar() {
       salePrice: null,
       saleDate: new Date().toISOString().split('T')[0],
     };
-  } catch (error) {
+  } catch (error: any) {
+    const message = error?.response?.data?.message || 'Erro ao salvar a movimentação!';
     ElMessage({
-      message: 'Erro ao salvar a movimentação!',
+      message,
       type: 'error',
       iconClass: 'custom-toast-icon-error',
       duration: 3000,
       showClose: true,
     });
   }
+
 }
 
-const formattedSalePrice = ref('');
 
 function formatCurrency(value: number): string {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -154,5 +164,15 @@ function handleSalePriceInput(value: string) {
 .custom-toast-icon-error {
   color: #f44336;
   font-size: 20px;
+}
+
+#estoque-disponivel {
+margin-top: -2.5px;
+  color: #abacae !important;
+}
+
+:deep(.el-divider__text) {
+  color: #abacae !important;
+  font-weight: 500;
 }
 </style>

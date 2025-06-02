@@ -10,6 +10,7 @@ import java.util.List;
 public class ProductResponseDTO {
 
     private Long id;
+    private String code;
     private String description;
     private String type;
     private BigDecimal supplierValue;

@@ -20,6 +20,8 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String code;
+
     private String description;
 
     @Enumerated(EnumType.STRING)

@@ -11,6 +11,7 @@
       <el-option label="Móvel" value="FURNITURE"></el-option>
     </el-select>
     <el-table :data="filteredProducts" style="width: 100%">
+      <el-table-column prop="code" label="Código"/>
       <el-table-column prop="description" label="Descrição"/>
       <el-table-column
           prop="type"

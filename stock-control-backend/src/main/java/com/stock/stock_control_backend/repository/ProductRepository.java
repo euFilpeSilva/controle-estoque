@@ -11,4 +11,6 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     List<ProductEntity> findByType(ProductTypeEnum tipoProduto);
+
+    boolean existsByCode(String code);
 }
