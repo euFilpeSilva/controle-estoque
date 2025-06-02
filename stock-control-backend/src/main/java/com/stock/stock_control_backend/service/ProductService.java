@@ -161,7 +161,7 @@ public class ProductService {
         NumberFormat formatador = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         String lucroFormatado = formatador.format(lucro);
 
-        return new ProfitProductDTO(product.getDescription(), totalSaida, lucro, lucroFormatado);
+        return new ProfitProductDTO(product.getCode(), product.getDescription(), totalSaida, lucro, lucroFormatado);
     }
 
     public Page<ProfitProductDTO> getAllProfits(int page, int size, String startDate, String endDate) {

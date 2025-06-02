@@ -4,18 +4,26 @@
       <h2>Lista de Produtos</h2>
     </div>
     <el-button id="bot-cadastro" type="primary" @click="openDrawer()">Cadastrar</el-button>
-    <el-select v-model="selectedType" placeholder="Filtrar por tipo" style="margin: 15px 15px 15px 15px; width: 200px;">
+    <el-select v-model="selectedType" placeholder="Filtrar por categoria" style="margin: 15px 15px 15px 15px; width: 200px;">
       <el-option label="Todos" value=""></el-option>
       <el-option label="Eletrônico" value="ELECTRONICS"></el-option>
       <el-option label="Eletrodoméstico" value="HOME_APPLIANCE"></el-option>
       <el-option label="Móvel" value="FURNITURE"></el-option>
     </el-select>
+
+    <el-input
+        v-model="searchCode"
+        placeholder="Pesquisar por código"
+        clearable
+        style="width: 200px;"
+    />
+
     <el-table :data="filteredProducts" style="width: 100%">
       <el-table-column prop="code" label="Código"/>
       <el-table-column prop="description" label="Descrição"/>
       <el-table-column
           prop="type"
-          label="Tipo"
+          label="Categoria"
           :formatter="(row) => {
     const typeTranslations = {
       ELECTRONICS: 'ELETRÔNICO',
@@ -63,7 +71,7 @@
         :page-size="pageSize"
         :total="totalItems"
         id="paginacao"
-        layout="prev, pager, next, jumper"
+        layout="prev, pager, next, jumper, total"
         prev-text="Anterior"
         next-text="Próximo">
     </el-pagination>
@@ -92,22 +100,26 @@ import {deletarProduto, listarProdutos} from '@/services/productService';
 import {Product} from '@/types/Product';
 import ProductForm from '@/pages/product/ProductForm.vue';
 
-const produtos = ref<Product[]>([]);
-const currentPage = ref(1);
 const pageSize = ref(10);
 const totalItems = ref(0);
-const drawerVisible = ref(false);
-const selectedProduct = ref<Partial<Product> | null>(null);
+const currentPage = ref(1);
+const searchCode = ref('');
 const selectedType = ref('');
+const drawerVisible = ref(false);
 const isModalVisible = ref(false);
+const produtos = ref<Product[]>([]);
 const selectedProductId = ref<number | null>(null);
+const selectedProduct = ref<Partial<Product> | null>(null);
+
 
 const filteredProducts = computed(() => {
-  if (!selectedType.value) {
-    return produtos.value;
-  }
-  return produtos.value.filter(product => product.type === selectedType.value);
+  return produtos.value.filter(product => {
+    const matchesType = !selectedType.value || product.type === selectedType.value;
+    const matchesCode = !searchCode.value || product.code?.toString().includes(searchCode.value);
+    return matchesType && matchesCode;
+  });
 });
+
 
 const drawerTitle = computed(() => {
   return selectedProduct.value ? 'Editar Produto' : 'Cadastrar Produto';

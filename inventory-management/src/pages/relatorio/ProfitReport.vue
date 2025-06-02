@@ -15,7 +15,11 @@
       </el-form-item>
     </el-form>
     <el-table :data="lucro.content" style="width: 100%">
-      <el-table-column prop="description" label="Produto"/>
+      <el-table-column label="Produto">
+        <template #default="scope">
+          {{ scope.row.code }} - {{ scope.row.description }}
+        </template>
+      </el-table-column>
       <el-table-column prop="totalProfitFormatted" label="Lucro Total"/>
     </el-table>
     <div class="pagination-container">

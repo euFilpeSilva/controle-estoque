@@ -4,7 +4,21 @@
       <h2>Movimentações</h2>
     </div>
     <el-button id="bot-cadastro" type="primary" @click="drawerVisible = true">Nova Movimentação</el-button>
-    <el-table :data="movements" style="width: 100%">
+
+    <el-select v-model="selectedType" placeholder="Filtrar por tipo" style="margin: 15px 15px 15px 15px; width: 200px;">
+      <el-option label="Todos" value=""></el-option>
+      <el-option label="ENTRADA" value="ENTRY"></el-option>
+      <el-option label="SAÍDA" value="EXIT"></el-option>
+    </el-select>
+
+    <el-input
+        v-model="searchCode"
+        placeholder="Pesquisar por código"
+        clearable
+        style="width: 200px;"
+    />
+
+    <el-table :data="paginatedMovements" style="width: 100%">
       <el-table-column label="Produto">
         <template #default="scope">
           {{ scope.row.productCode }} - {{ scope.row.productDescription }}
@@ -24,12 +38,12 @@
         @current-change="handlePageChange"
         :current-page="currentPage"
         :page-size="pageSize"
-        :total="totalItems"
+        :total="filteredMovements.length"
         id="paginacao"
-        layout="prev, pager, next, jumper"
+        layout="prev, pager, next, jumper, total"
         prev-text="Anterior"
-        next-text="Próximo">
-    </el-pagination>
+        next-text="Próximo"
+    />
 
     <el-drawer
         id="drower"
@@ -44,26 +58,49 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import {Movement} from "@/types/Movement";
 import MovementForm from "@/pages/movement/MovementForm.vue";
 import {listarMovimentos} from "@/services/movementService.ts";
 
 const movements = ref<Movement[]>([]);
+const selectedType = ref('');
+const searchCode = ref('');
+
 const currentPage = ref(1);
 const pageSize = ref(10);
-const totalItems = ref(0);
+
 const drawerVisible = ref(false);
 
+const filteredMovements = computed(() => {
+  return movements.value.filter(movement => {
+    const matchesType = !selectedType.value || movement.movementType === selectedType.value;
+    const matchesCode = !searchCode.value || movement.productCode?.includes(searchCode.value);
+    return matchesType && matchesCode;
+  });
+});
+
+
+const totalItems = computed(() => filteredMovements.value.length);
+
+const paginatedMovements = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  return filteredMovements.value.slice(start, end);
+});
+
+watch([selectedType, searchCode], () => {
+  currentPage.value = 1;
+});
+
 async function fetchMovements() {
-  const response = await listarMovimentos(currentPage.value - 1, pageSize.value);
+  const response = await listarMovimentos(); // sem paginação no back-end
   movements.value = response.data.content;
-  totalItems.value = response.data.totalElements;
 }
 
 function handlePageChange(page: number) {
   currentPage.value = page;
-  fetchMovements();
+  fetchMovements()
 }
 
 function handleMovementSaved() {
@@ -73,6 +110,7 @@ function handleMovementSaved() {
 
 onMounted(fetchMovements);
 </script>
+
 
 <style scoped>
 #drower {
@@ -98,7 +136,7 @@ onMounted(fetchMovements);
 }
 
 :deep(.el-drawer__body) {
-  padding: 0 !important; /* Remove o padding */
+  padding: 0 !important;
 }
 
 #bot-cadastro {
@@ -108,5 +146,9 @@ onMounted(fetchMovements);
 #paginacao {
   margin-top: 20px;
   margin-left: 5px;
+}
+
+:deep(.el-pagination__rightwrapper) {
+    flex: none;
 }
 </style>

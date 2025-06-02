@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ProfitProductDTO {
 
+    private String code;
     private String description;
     private int totalOutputs;
     private BigDecimal totalProfit;

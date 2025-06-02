@@ -24,8 +24,14 @@
         <el-input-number v-model="form.quantityMovement"/>
       </el-form-item>
       <el-form-item label="Data da Venda" prop="saleDate">
-        <el-date-picker v-model="form.saleDate" type="date"/>
+        <el-date-picker
+            id="data-picker"
+            v-model="form.saleDate"
+            type="date"
+            style="width: 150px"
+        />
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" :disabled="!isFormValid" @click="salvar">Salvar</el-button>
       </el-form-item>
