@@ -4,6 +4,9 @@
       <h2>Relatório de Lucro</h2>
     </div>
     <el-form :model="filters" label-width="120px">
+      <el-form-item label="Código" style="width: 340px">
+        <el-input v-model="filters.productCode" placeholder="Filtrar por código"/>
+      </el-form-item>
       <el-form-item label="Data Inicial">
         <el-date-picker v-model="filters.startDate" type="date"/>
       </el-form-item>
@@ -14,12 +17,13 @@
         <el-button type="primary" @click="buscarLucro">Buscar</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="lucro.content" style="width: 100%">
+    <el-table :data="filteredLucro" style="width: 100%">
       <el-table-column label="Produto">
         <template #default="scope">
           {{ scope.row.code }} - {{ scope.row.description }}
         </template>
       </el-table-column>
+      <el-table-column prop="totalOutputs" label="Total saídas"/>
       <el-table-column prop="totalProfitFormatted" label="Lucro Total"/>
     </el-table>
     <div class="pagination-container">
@@ -43,12 +47,13 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {listarLucroPaginado} from "@/services/productService";
 
 const filters = ref({
   startDate: null,
   endDate: null,
+  productCode: ''
 });
 
 const lucro = ref({
@@ -61,20 +66,22 @@ const pagination = ref({
   size: 10,
 });
 
+
 async function buscarLucro() {
   try {
     const res = await listarLucroPaginado(
         pagination.value.page - 1,
         pagination.value.size,
         filters.value.startDate,
-        filters.value.endDate
+        filters.value.endDate,
+        filters.value.productCode
     );
     lucro.value = res.data;
-    console.log("Lucro carregado:", lucro.value);
   } catch (error) {
-    console.error("Erro ao buscar lucro:", error);
+    ElMessage.error(error.response?.data?.message || 'Erro inesperado ao buscar lucro.');
   }
 }
+
 
 function handlePageChange(newPage: number) {
   pagination.value.page = newPage;
@@ -85,6 +92,13 @@ function handleSizeChange(newSize: number) {
   pagination.value.size = newSize;
   buscarLucro();
 }
+
+const filteredLucro = computed(() => {
+  if (!filters.value.productCode) return lucro.value.content;
+  return lucro.value.content.filter(item =>
+      item.code?.toLowerCase().includes(filters.value.productCode.toLowerCase())
+  );
+});
 
 onMounted(buscarLucro);
 </script>
