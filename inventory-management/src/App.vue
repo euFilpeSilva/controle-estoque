@@ -9,7 +9,7 @@
     </el-aside>
     <el-container style="background-color: #ffffff;">
       <el-header class="title-header">
-        <h1 style="margin: 0; padding: 10px 0;">Gestão de Estoque</h1>
+        <h1 style="color: #9093a6; margin: 0; padding: 10px 0;">Gestão de Estoque</h1>
       </el-header>
       <el-main>
         <router-view/>
